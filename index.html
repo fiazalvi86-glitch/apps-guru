@@ -2,82 +2,142 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apps Guru - Instant Bulk Creator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Apps Guru - Top 10 Apps</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00d1b2; --dark: #121212; --card: #1e1e1e; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; margin: 0; padding-bottom: 200px; }
-        header { background: #000; padding: 20px; text-align: center; border-bottom: 3px solid var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .container { max-width: 800px; margin: auto; padding: 20px; }
+        :root { --primary: #00a4ef; --bg: #000000; --card: #121212; }
         
-        /* App Card Style */
-        .app-card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 15px; display: flex; align-items: center; border: 1px solid #333; position: relative; animation: slideIn 0.3s ease; }
-        @keyframes slideIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-        
-        .rank-tag { position: absolute; top: -10px; left: -10px; background: var(--primary); color: #000; padding: 5px 12px; border-radius: 8px; font-weight: bold; font-size: 18px; }
-        .app-img { width: 75px; height: 75px; border-radius: 15px; margin-right: 20px; object-fit: cover; background: #333; border: 2px solid #444; }
-        .app-info h3 { margin: 0; color: var(--primary); font-size: 22px; text-transform: capitalize; }
-        .app-info p { margin: 5px 0; font-size: 14px; color: #888; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Roboto', sans-serif; background: var(--bg); color: white; margin: 0; padding: 0; overflow-x: hidden; }
 
-        /* Bulk Admin Panel (Bottom) */
-        .admin-panel { position: fixed; bottom: 0; left: 0; right: 0; background: #1a1a1a; padding: 20px; border-top: 3px solid var(--primary); z-index: 100; text-align: center; }
-        textarea { width: 90%; max-width: 600px; height: 60px; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #252525; color: white; margin-bottom: 10px; font-size: 14px; resize: none; }
-        .bulk-btn { background: var(--primary); color: black; border: none; padding: 12px 40px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
-        .bulk-btn:hover { background: #fff; transform: translateY(-3px); }
-        .hint { font-size: 12px; color: #666; margin-top: 8px; }
+        header { background: #111; padding: 15px; text-align: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 22px; font-weight: bold; color: var(--primary); letter-spacing: 1px; }
+
+        .container { width: 100%; max-width: 500px; margin: auto; padding: 10px; }
+
+        /* App Card Style - 90% Mobile Optimized */
+        .app-card { 
+            background: var(--card); 
+            border-radius: 12px; 
+            padding: 12px; 
+            margin-bottom: 12px; 
+            display: flex; 
+            align-items: center; 
+            border: 1px solid #222;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .rank-num { 
+            font-size: 18px; 
+            font-weight: bold; 
+            color: #888; 
+            width: 30px; 
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        .app-img { 
+            width: 60px; 
+            height: 60px; 
+            border-radius: 12px; 
+            margin-right: 15px; 
+            object-fit: cover;
+            background: #222;
+            border: 1px solid #333;
+        }
+
+        .app-info { flex: 1; }
+        .app-info h3 { margin: 0; font-size: 17px; color: #fff; text-transform: capitalize; }
+        .app-info p { margin: 3px 0 0; font-size: 13px; color: #999; line-height: 1.3; }
+
+        /* Bottom Bulk Panel - Simple & Clean */
+        .admin-panel { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            background: #111; 
+            padding: 15px; 
+            border-top: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        textarea { 
+            width: 100%; 
+            height: 50px; 
+            background: #222; 
+            border: 1px solid #444; 
+            border-radius: 8px; 
+            color: white; 
+            padding: 10px; 
+            font-size: 14px; 
+            resize: none;
+        }
+
+        .btn-gen { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            font-size: 15px; 
+            cursor: pointer;
+        }
+
+        .btn-gen:active { transform: scale(0.98); opacity: 0.9; }
+
+        .placeholder-text { text-align: center; color: #555; margin-top: 100px; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>📱 Apps Guru</h1>
-    <p style="color: #666;">Instant Ranking Generator</p>
+    <div class="logo">APPS GURU</div>
 </header>
 
 <div class="container" id="listContainer">
-    <p style="text-align: center; color: #444; margin-top: 50px;">Niche box mein apps ke naam likh kar "Generate" karein!</p>
+    <div class="placeholder-text">Enter apps below separated by commas <br> (e.g. WhatsApp, Facebook, TikTok)</div>
 </div>
 
 <div class="admin-panel">
-    <textarea id="bulkInput" placeholder="Apps ke naam likhein (comma separated)... e.g. WhatsApp, TikTok, Facebook, Instagram"></textarea>
-    <br>
-    <button class="bulk-btn" onclick="generateBulk()">🚀 Generate List</button>
-    <div class="hint">Har naam ke baad comma (,) lagayein. Images khud hi dhoond li jayengi!</div>
+    <textarea id="bulkInput" placeholder="Enter app names here..."></textarea>
+    <button class="btn-gen" onclick="generateList()">Generate Top 10 List</button>
 </div>
 
 <script>
-    function generateBulk() {
+    function generateList() {
         const input = document.getElementById('bulkInput').value;
         const container = document.getElementById('listContainer');
         
-        if(!input.trim()) {
-            alert("Bhai, pehle list to likho!");
-            return;
-        }
+        if(!input.trim()) return;
 
-        // Comma se alag karke array banana
-        const appNames = input.split(',').map(name => name.trim()).filter(name => name !== "");
-        
-        container.innerHTML = ""; // Purana data saaf
-        
-        appNames.forEach((name, index) => {
-            // Magic: Unsplash se related tech image nikalna
-            const randomID = Math.floor(Math.random() * 1000);
-            const autoImg = `https://source.unsplash.com/80x80/?${name},app,tech&sig=${randomID}`;
+        const apps = input.split(',').map(a => a.trim()).filter(a => a !== "");
+        container.innerHTML = "";
+
+        apps.forEach((name, index) => {
+            // MAGIC: Google Play Store ka official Icon search link
+            // Agar exact icon na mila, to ye Play Store ka default bag icon dikhayega
+            const playStoreIcon = `https://www.gstatic.com/android/market_images/web/play_prism_h_60.png`; 
             
+            // Behtar image fetcher (Google search favicon trick)
+            const googleIcon = `https://www.google.com/s2/favicons?sz=128&domain=${name}.com`;
+
             container.innerHTML += `
                 <div class="app-card">
-                    <div class="rank-tag">#${index + 1}</div>
-                    <img src="${autoImg}" class="app-img" onerror="this.src='https://via.placeholder.com/80?text=App'">
+                    <div class="rank-num">${index + 1}</div>
+                    <img src="${googleIcon}" class="app-img" onerror="this.src='${playStoreIcon}'">
                     <div class="app-info">
                         <h3>${name}</h3>
-                        <p>Discover why ${name} is one of the top-rated apps this month. High performance and great user experience guaranteed.</p>
+                        <p>High performance app with top user ratings. Essential for your daily digital life.</p>
                     </div>
                 </div>
             `;
         });
 
-        // Input box khali kar dena
         document.getElementById('bulkInput').value = "";
     }
 </script>
