@@ -3,86 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apps Guru - Top 10 Mobile App Rankings</title>
+    <title>Apps Guru - Top 10 Ranking</title>
     <style>
-        :root { --primary: #00d1b2; --dark: #1a1a1a; --card: #2d2d2d; }
-        body { font-family: 'Poppins', sans-serif; background: var(--dark); color: white; margin: 0; padding: 0; }
-        header { background: #111; padding: 20px; text-align: center; border-bottom: 3px solid var(--primary); }
-        .logo { font-size: 28px; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; }
-        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+        :root { --primary: #00d1b2; --dark: #121212; --card: #1e1e1e; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; margin: 0; padding-bottom: 100px; }
+        header { background: #000; padding: 20px; text-align: center; border-bottom: 3px solid var(--primary); }
+        .container { max-width: 800px; margin: auto; padding: 20px; }
         
-        .app-list { display: flex; flex-direction: column; gap: 20px; }
-        .app-card { background: var(--card); border-radius: 15px; overflow: hidden; display: flex; align-items: center; padding: 20px; transition: 0.3s; position: relative; border: 1px solid #444; }
-        .app-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        
-        .rank { position: absolute; top: 10px; left: 10px; background: var(--primary); color: #000; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; box-shadow: 0 0 10px rgba(0,209,178,0.5); }
-        
-        .app-img { width: 100px; height: 100px; border-radius: 20px; object-fit: cover; margin-right: 25px; border: 2px solid #555; }
-        .app-info { flex: 1; }
-        .app-info h2 { margin: 0 0 10px 0; font-size: 24px; color: var(--primary); }
-        .app-info p { margin: 0; color: #bbb; line-height: 1.6; font-size: 15px; }
-        
-        .btn-download { display: inline-block; margin-top: 15px; background: #fff; color: #000; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.3s; }
-        .btn-download:hover { background: var(--primary); color: #000; }
+        /* App Card Style */
+        .app-card { background: var(--card); border-radius: 12px; padding: 15px; margin-bottom: 15px; display: flex; align-items: center; border: 1px solid #333; position: relative; }
+        .rank-tag { position: absolute; top: -5px; left: -5px; background: var(--primary); color: #000; padding: 2px 10px; border-radius: 5px; font-weight: bold; }
+        .app-img { width: 70px; height: 70px; border-radius: 12px; margin-right: 15px; object-fit: cover; background: #333; }
+        .app-info h3 { margin: 0; color: var(--primary); }
+        .app-info p { margin: 5px 0; font-size: 14px; color: #aaa; }
 
-        .ad-box { width: 100%; height: 100px; background: #222; border: 1px dashed #555; display: flex; align-items: center; justify-content: center; margin: 20px 0; color: #666; font-size: 12px; }
+        /* Admin Form Style (Bottom Sticky) */
+        .admin-panel { position: fixed; bottom: 0; left: 0; right: 0; background: #222; padding: 15px; border-top: 2px solid var(--primary); display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; z-index: 100; }
+        input, textarea { padding: 8px; border-radius: 5px; border: 1px solid #444; background: #333; color: white; font-size: 12px; }
+        .add-btn { background: var(--primary); color: black; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        
+        .copy-code-btn { background: #ffdd57; color: #000; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 12px; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">📱 Apps Guru</div>
-    <p style="color: #888; font-size: 14px;">The Ultimate Top 10 Ranking Guide</p>
+    <h1>📱 Apps Guru</h1>
 </header>
 
-<div class="container">
-    <div class="ad-box">AD SPACE (TOP) - GOOGLE ADS READY</div>
+<div class="container" id="listContainer">
+    </div>
 
-    <div id="appContainer" class="app-list">
-        </div>
-
-    <div class="ad-box">AD SPACE (BOTTOM) - ADSTERRA READY</div>
+<div class="admin-panel">
+    <input type="text" id="appName" placeholder="App Name (e.g. WhatsApp)">
+    <input type="text" id="appImg" placeholder="Image URL (Google se link copy karein)">
+    <textarea id="appDesc" placeholder="Short Description..."></textarea>
+    <button class="add-btn" onclick="addApp()">Add to List</button>
+    <button class="copy-code-btn" onclick="getFinalCode()">Get Code for GitHub</button>
 </div>
 
 <script>
-    // ⬇️ ADMIN PANEL: Yahan bas details add karein, site khud ban jayegi!
-    const appsData = [
-        {
-            name: "TikTok",
-            desc: "The world's leading short-form video platform. Create, share, and discover amazing content.",
-            img: "https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg",
-            link: "#"
-        },
-        {
-            name: "InShot Pro",
-            desc: "Best video editor for mobile with premium transitions and music. No watermark included.",
-            img: "https://play-lh.googleusercontent.com/9S9p_Kk5C3Z6O1y6q9n9z...", // Real image link yahan dalna
-            link: "#"
-        },
-        {
-            name: "WhatsApp",
-            desc: "Simple, secure, and reliable messaging used by over 2 billion people worldwide.",
-            img: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg",
-            link: "#"
-        }
-        // Nayi apps yahan add karte jayein...
-    ];
+    let apps = [];
 
-    const container = document.getElementById('appContainer');
-
-    appsData.forEach((app, index) => {
-        container.innerHTML += `
-            <div class="app-card">
-                <div class="rank">${index + 1}</div>
-                <img src="${app.img}" class="app-img" alt="${app.name}">
-                <div class="app-info">
-                    <h2>${app.name}</h2>
-                    <p>${app.desc}</p>
-                    <a href="${app.link}" class="btn-download">Get It Now</a>
+    // 1. App ko Screen par dikhane ka function
+    function render() {
+        const container = document.getElementById('listContainer');
+        container.innerHTML = "";
+        apps.forEach((app, index) => {
+            container.innerHTML += `
+                <div class="app-card">
+                    <div class="rank-tag">#${index + 1}</div>
+                    <img src="${app.img}" class="app-img">
+                    <div class="app-info">
+                        <h3>${app.name}</h3>
+                        <p>${app.desc}</p>
+                    </div>
                 </div>
-            </div>
-        `;
-    });
+            `;
+        });
+    }
+
+    // 2. Form se data pakadne ka function
+    function addApp() {
+        const name = document.getElementById('appName').value;
+        const img = document.getElementById('appImg').value || 'https://via.placeholder.com/70';
+        const desc = document.getElementById('appDesc').value;
+
+        if(name && desc) {
+            apps.push({ name, img, desc });
+            render();
+            // Clear inputs
+            document.getElementById('appName').value = "";
+            document.getElementById('appDesc').value = "";
+            document.getElementById('appImg').value = "";
+        } else {
+            alert("Bhai, Naam aur Description to likho!");
+        }
+    }
+
+    // 3. Sab se zaroori: GitHub par save karne ke liye code nikalna
+    function getFinalCode() {
+        console.log("Current Apps JSON:", JSON.stringify(apps));
+        alert("Bhai, niche console mein code aa gaya hai. Lekin asan tarika ye hai ke aap bas ye list copy karein.");
+    }
 </script>
 
 </body>
