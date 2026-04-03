@@ -3,88 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apps Guru - Top 10 Ranking</title>
+    <title>Apps Guru - Instant Bulk Creator</title>
     <style>
         :root { --primary: #00d1b2; --dark: #121212; --card: #1e1e1e; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; margin: 0; padding-bottom: 100px; }
-        header { background: #000; padding: 20px; text-align: center; border-bottom: 3px solid var(--primary); }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; margin: 0; padding-bottom: 200px; }
+        header { background: #000; padding: 20px; text-align: center; border-bottom: 3px solid var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .container { max-width: 800px; margin: auto; padding: 20px; }
         
         /* App Card Style */
-        .app-card { background: var(--card); border-radius: 12px; padding: 15px; margin-bottom: 15px; display: flex; align-items: center; border: 1px solid #333; position: relative; }
-        .rank-tag { position: absolute; top: -5px; left: -5px; background: var(--primary); color: #000; padding: 2px 10px; border-radius: 5px; font-weight: bold; }
-        .app-img { width: 70px; height: 70px; border-radius: 12px; margin-right: 15px; object-fit: cover; background: #333; }
-        .app-info h3 { margin: 0; color: var(--primary); }
-        .app-info p { margin: 5px 0; font-size: 14px; color: #aaa; }
-
-        /* Admin Form Style (Bottom Sticky) */
-        .admin-panel { position: fixed; bottom: 0; left: 0; right: 0; background: #222; padding: 15px; border-top: 2px solid var(--primary); display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; z-index: 100; }
-        input, textarea { padding: 8px; border-radius: 5px; border: 1px solid #444; background: #333; color: white; font-size: 12px; }
-        .add-btn { background: var(--primary); color: black; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .app-card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 15px; display: flex; align-items: center; border: 1px solid #333; position: relative; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         
-        .copy-code-btn { background: #ffdd57; color: #000; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+        .rank-tag { position: absolute; top: -10px; left: -10px; background: var(--primary); color: #000; padding: 5px 12px; border-radius: 8px; font-weight: bold; font-size: 18px; }
+        .app-img { width: 75px; height: 75px; border-radius: 15px; margin-right: 20px; object-fit: cover; background: #333; border: 2px solid #444; }
+        .app-info h3 { margin: 0; color: var(--primary); font-size: 22px; text-transform: capitalize; }
+        .app-info p { margin: 5px 0; font-size: 14px; color: #888; }
+
+        /* Bulk Admin Panel (Bottom) */
+        .admin-panel { position: fixed; bottom: 0; left: 0; right: 0; background: #1a1a1a; padding: 20px; border-top: 3px solid var(--primary); z-index: 100; text-align: center; }
+        textarea { width: 90%; max-width: 600px; height: 60px; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #252525; color: white; margin-bottom: 10px; font-size: 14px; resize: none; }
+        .bulk-btn { background: var(--primary); color: black; border: none; padding: 12px 40px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        .bulk-btn:hover { background: #fff; transform: translateY(-3px); }
+        .hint { font-size: 12px; color: #666; margin-top: 8px; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>📱 Apps Guru</h1>
+    <p style="color: #666;">Instant Ranking Generator</p>
 </header>
 
 <div class="container" id="listContainer">
-    </div>
+    <p style="text-align: center; color: #444; margin-top: 50px;">Niche box mein apps ke naam likh kar "Generate" karein!</p>
+</div>
 
 <div class="admin-panel">
-    <input type="text" id="appName" placeholder="App Name (e.g. WhatsApp)">
-    <input type="text" id="appImg" placeholder="Image URL (Google se link copy karein)">
-    <textarea id="appDesc" placeholder="Short Description..."></textarea>
-    <button class="add-btn" onclick="addApp()">Add to List</button>
-    <button class="copy-code-btn" onclick="getFinalCode()">Get Code for GitHub</button>
+    <textarea id="bulkInput" placeholder="Apps ke naam likhein (comma separated)... e.g. WhatsApp, TikTok, Facebook, Instagram"></textarea>
+    <br>
+    <button class="bulk-btn" onclick="generateBulk()">🚀 Generate List</button>
+    <div class="hint">Har naam ke baad comma (,) lagayein. Images khud hi dhoond li jayengi!</div>
 </div>
 
 <script>
-    let apps = [];
-
-    // 1. App ko Screen par dikhane ka function
-    function render() {
+    function generateBulk() {
+        const input = document.getElementById('bulkInput').value;
         const container = document.getElementById('listContainer');
-        container.innerHTML = "";
-        apps.forEach((app, index) => {
+        
+        if(!input.trim()) {
+            alert("Bhai, pehle list to likho!");
+            return;
+        }
+
+        // Comma se alag karke array banana
+        const appNames = input.split(',').map(name => name.trim()).filter(name => name !== "");
+        
+        container.innerHTML = ""; // Purana data saaf
+        
+        appNames.forEach((name, index) => {
+            // Magic: Unsplash se related tech image nikalna
+            const randomID = Math.floor(Math.random() * 1000);
+            const autoImg = `https://source.unsplash.com/80x80/?${name},app,tech&sig=${randomID}`;
+            
             container.innerHTML += `
                 <div class="app-card">
                     <div class="rank-tag">#${index + 1}</div>
-                    <img src="${app.img}" class="app-img">
+                    <img src="${autoImg}" class="app-img" onerror="this.src='https://via.placeholder.com/80?text=App'">
                     <div class="app-info">
-                        <h3>${app.name}</h3>
-                        <p>${app.desc}</p>
+                        <h3>${name}</h3>
+                        <p>Discover why ${name} is one of the top-rated apps this month. High performance and great user experience guaranteed.</p>
                     </div>
                 </div>
             `;
         });
-    }
 
-    // 2. Form se data pakadne ka function
-    function addApp() {
-        const name = document.getElementById('appName').value;
-        const img = document.getElementById('appImg').value || 'https://via.placeholder.com/70';
-        const desc = document.getElementById('appDesc').value;
-
-        if(name && desc) {
-            apps.push({ name, img, desc });
-            render();
-            // Clear inputs
-            document.getElementById('appName').value = "";
-            document.getElementById('appDesc').value = "";
-            document.getElementById('appImg').value = "";
-        } else {
-            alert("Bhai, Naam aur Description to likho!");
-        }
-    }
-
-    // 3. Sab se zaroori: GitHub par save karne ke liye code nikalna
-    function getFinalCode() {
-        console.log("Current Apps JSON:", JSON.stringify(apps));
-        alert("Bhai, niche console mein code aa gaya hai. Lekin asan tarika ye hai ke aap bas ye list copy karein.");
+        // Input box khali kar dena
+        document.getElementById('bulkInput').value = "";
     }
 </script>
 
